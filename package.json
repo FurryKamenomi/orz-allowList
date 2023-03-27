@@ -1,0 +1,30 @@
+{
+  "name": "orz-whitelist",
+  "version": "0.0.1",
+  "description": "A plugin named allowlist of minecraft bedrock.",
+  "main": "./launcher.js",
+  "scripts": {
+    "test": "echo \"Please use LiteLoaderBDS to debug.\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FurryKamenomi/orz-allowList.git"
+  },
+  "keywords": [
+    "minecraft",
+    "bedrock",
+    "ComprehensiveVersion",
+    "liteloaderBDS",
+    "plugin",
+    "allowList"
+  ],
+  "author": "Kamenomi",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/FurryKamenomi/orz-allowList/issues"
+  },
+  "homepage": "https://github.com/FurryKamenomi/orz-allowList#readme",
+  "devDependencies": {
+    "@types/node": "^18.15.10"
+  }
+}
