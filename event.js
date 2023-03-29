@@ -33,21 +33,21 @@ GitRepo: ${this.mainThis.gitRepo}`, 5));
             var playerInfo = this.mainThis.playerList.get(player.uuid);
             this.mainThis._playerList.updatePlayerList(this.mainThis.playerList);
             var allowTimeOut = playerInfo.allowInfo.outdate;
-            logger.info(`已上载 ${this.mainThis.playerList.size} 条玩家数据。`);
+            logger.info(`${this.mainThis.playerList.size} player information loaded. `);
             if (playerInfo.blockInfo.enable) {
-                var blockTimeOut = playerInfo.blockInfo.outdate;
-                var timeString = new Date(blockTimeOut || 0).toDateString();
-                player.disconnect(playerInfo.blockInfo.duringReason.replace('$timeout$', (blockTimeOut == null) ? 'Infinity' : timeString));
+                var blockOutdate = playerInfo.blockInfo.outdate;
+                var timeString = new Date(blockOutdate || 0).toDateString();
+                player.disconnect(this.mainThis._config.config().messages.Was_Banned.replace('$reason$', playerInfo.blockInfo.duringReason.replace('$timeout$', (blockOutdate == null) ? 'Forever' : timeString)));
                 return;
             }
             ;
             if (!playerInfo.allowInfo.enable) {
-                player.disconnect('You have not a AllowList permission');
+                player.disconnect(this.mainThis._config.config().messages.No_AllowList_Permission);
                 return;
             }
             ;
             if (allowTimeOut != null && allowTimeOut < (new Date).valueOf()) {
-                player.disconnect('Your AllowList permission was outted! ');
+                player.disconnect(this.mainThis._config.config().messages.AllowList_Permission_Outdate);
                 playerInfo.allowInfo.enable = false;
                 this.mainThis.playerList.set(player.uuid, playerInfo);
                 this.mainThis._playerList.updatePlayerList(this.mainThis.playerList);
@@ -65,11 +65,11 @@ GitRepo: ${this.mainThis.gitRepo}`, 5));
             var blockOutdate = playerInfo.blockInfo.outdate;
             var timeString = new Date(blockOutdate || 0).toDateString();
             if (!playerInfo.allowInfo.enable) {
-                player.disconnect('You was deprived the allowList permission! ');
+                player.disconnect(this.mainThis._config.config().messages.Was_AllowList_Outdate);
                 return;
             }
             if (playerInfo.blockInfo.enable) {
-                player.disconnect(`You was banned! ${playerInfo.blockInfo.duringReason.replace('$timeout$', (blockOutdate == null) ? 'Infinity' : timeString)}`);
+                player.disconnect(this.mainThis._config.config().messages.Was_Banned.replace('$reason$', playerInfo.blockInfo.duringReason.replace('$timeout$', (blockOutdate == null) ? 'Forever' : timeString)));
                 return;
             }
             ;

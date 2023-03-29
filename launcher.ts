@@ -1,6 +1,7 @@
 /// <reference path="D:/projects/project-minecraftBedrock/plugins/defineTypescript/dts/llaids/src/index.d.ts"/>
 /// <reference path="plugin.d.ts"/>
 
+import { CConfigModule } from './config';
 import { CEventModule } from './event';
 import playerListModule = require('./playerList');
 
@@ -12,6 +13,7 @@ class COrzAllowList implements orzPlugin.NOrzAllowList.IMainModule {
   readonly gitRepo = 'https://github.com/FurryKamenomi/orz-allowList';
   readonly introduction = "A Minecraft Bedrock plugin in ORZ.";
 
+  public _config = new CConfigModule;
   public _event = new CEventModule(this);
 
   public _playerList = new playerListModule.CPlayerList;
@@ -34,7 +36,6 @@ class COrzAllowList implements orzPlugin.NOrzAllowList.IMainModule {
 };
 
 const OrzAllowList = new COrzAllowList;
-export const refresh = OrzAllowList._event.onMsgRefresh.bind(OrzAllowList._event);
 
 setInterval(() => { // 定时: 对于在线玩家 timeout 的处理。
   mc.getOnlinePlayers().forEach(player => {
@@ -42,7 +43,7 @@ setInterval(() => { // 定时: 对于在线玩家 timeout 的处理。
 
     if (playerInfo.allowInfo.enable)
       if (playerInfo.allowInfo.outdate != null && playerInfo.allowInfo.outdate < (new Date()).valueOf()) {
-        player.disconnect('Your the allowList permission was outdate! ');
+        player.disconnect(OrzAllowList._config.config().messages.AllowList_Permission_Outdate);
         return;
       };
   });
@@ -53,8 +54,11 @@ setInterval(() => { // 定时: 对于在线玩家 timeout 的处理。
       if (playerInfo.blockInfo.outdate != null && playerInfo.blockInfo.outdate < (new Date()).valueOf()) {
         playerInfo.blockInfo.enable = false;
         playerInfo.blockInfo.outdate = null;
+
         OrzAllowList.playerList.set(value[0], playerInfo);
         OrzAllowList._playerList.updatePlayerList(OrzAllowList.playerList);
       };
   });
-}, 60 * 60 * 1000);
+}, OrzAllowList._config.config().intervalServerMS);
+
+export const refresh = OrzAllowList._event.onMsgRefresh.bind(OrzAllowList._event);

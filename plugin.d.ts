@@ -12,6 +12,7 @@ declare global {
     }
     namespace NOrzAllowList {
       interface IMainModule extends IOrzBase {
+        _config: IConfigMoudule
         _playerList: IPlayerModule
         playerList: Map<String, TPlayerInfomation>
       }
@@ -20,7 +21,8 @@ declare global {
         updatePlayerList(data: Map<String, TPlayerInfomation>)
       }
       interface IConfigMoudule {
-
+        config(conf: TConfigStruc): void
+        config(): TConfigStruc
       }
       interface IEventModule {
 
@@ -43,6 +45,18 @@ declare global {
         outdate: number | null,
         duringReason: string | 'You was banned. $timeout'
       }
+    }
+    
+    type TConfigStruc = {
+      messages: {
+        No_AllowList_Permission: string,
+        AllowList_Permission_Outdate: string,
+        Was_Deprvied_AllowList_Permission: string,
+        Was_Banned: string,
+        Was_AllowList_Outdate: string
+      },
+      intervalServerMS: number,
+      intervalConfigMS: number
     }
   }
 }

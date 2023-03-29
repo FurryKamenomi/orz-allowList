@@ -3,6 +3,7 @@
 /// <reference path="plugin.d.ts"/>
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.refresh = void 0;
+const config_1 = require("./config");
 const event_1 = require("./event");
 const playerListModule = require("./playerList");
 class COrzAllowList {
@@ -12,6 +13,7 @@ class COrzAllowList {
     version = [0, 0, 1];
     gitRepo = 'https://github.com/FurryKamenomi/orz-allowList';
     introduction = "A Minecraft Bedrock plugin in ORZ.";
+    _config = new config_1.CConfigModule;
     _event = new event_1.CEventModule(this);
     _playerList = new playerListModule.CPlayerList;
     playerList = this._playerList.getPlayerList();
@@ -28,13 +30,12 @@ class COrzAllowList {
 }
 ;
 const OrzAllowList = new COrzAllowList;
-exports.refresh = OrzAllowList._event.onMsgRefresh.bind(OrzAllowList._event);
 setInterval(() => {
     mc.getOnlinePlayers().forEach(player => {
         var playerInfo = OrzAllowList.playerList.get(player.uuid);
         if (playerInfo.allowInfo.enable)
             if (playerInfo.allowInfo.outdate != null && playerInfo.allowInfo.outdate < (new Date()).valueOf()) {
-                player.disconnect('Your the allowList permission was outdate! ');
+                player.disconnect(OrzAllowList._config.config().messages.AllowList_Permission_Outdate);
                 return;
             }
         ;
@@ -50,4 +51,5 @@ setInterval(() => {
             }
         ;
     });
-}, 60 * 60 * 1000);
+}, OrzAllowList._config.config().intervalServerMS);
+exports.refresh = OrzAllowList._event.onMsgRefresh.bind(OrzAllowList._event);
